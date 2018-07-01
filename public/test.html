@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+		<style>
+			body {
+				line-height: 1.6;
+			}
+			
+			.container {
+				width: 400px;
+				margin: 20px auto;
+			}
+			
+			.container .tips {
+				display: flex;
+				justify-content: center;
+				text-align: center;
+				font-size: 24px;
+				line-height: 1.6;
+				border: 1px solid #000;
+				border-radius: 4px 4px 0 0;
+			}
+			
+			.container .tips>div {
+				box-sizing: border-box;
+				width: 50%;
+			}
+			
+			.container .login_ui,
+			.container .register_ui {
+				padding: 30px 0;
+				border: 1px solid #000;
+				border-top: none;
+				border-radius: 0 0 4px 4px;
+			}
+			
+			.container .row {
+				padding: 10px 0;
+			}
+			
+			.container span {
+				float: left;
+				width: 100px;
+				line-height: 30px;
+				text-align: right;
+				padding-right: 10px;
+			}
+			
+			.container .info {
+				width: 250px;
+				line-height: 26px;
+				text-indent: 1em;
+			}
+			
+			.container .info {
+				float: left;
+				border-radius: 4px;
+				background-color: #fff;
+				border: 1px solid #111;
+				outline: none;
+			}
+			
+			.container .login_btn,
+			.container .register_btn {
+				font-size: 20px;
+				padding: 2px 10px;
+				line-height: 30px;
+				padding: 0 30px;
+			}
+			
+			.container .btn {
+				margin: 20px auto 0;
+				display: block;
+			}
+			
+			.container .register_ui .specail_row input:first-of-type {
+				width: 100px;
+				margin-right: 20px;
+			}
+			
+			.container .register_ui .specail_row .send {
+				box-sizing: border-box;
+				width: 110px;
+				padding: 4px 0;
+				text-align: center;
+			}
+			
+			.container .register_ui img {
+				display: block;
+				width: 120px;
+				height: 50px;
+			}
+			
+			.container .register_ui .specail_row {
+				display: flex;
+				align-items: center;
+			}
+			
+			.container .register_ui {
+				display: none;
+			}
+			
+			.clearfix:after {
+				content: "";
+				display: block;
+				clear: both;
+				height: 0;
+				visibility: hidden;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="tips">
+				<div class="login">登&nbsp;陆</div>
+				<div class="register">注&nbsp;册</div>
+			</div>
+			<div>
+				<div class="login_ui ui">
+					<div class="row clearfix">
+						<span>账&nbsp;号&nbsp;:</span>
+						<input type="text" class="account user_info info" placeholder="账号/手机/邮箱">
+					</div>
+					<div class="row clearfix">
+						<span>密&nbsp;码&nbsp;:</span>
+						<input type="password" class="passwd user_info info">
+					</div>
+					<div class="row clearfix">
+						<input type="button" class="login_btn btn" value="登陆">
+					</div>
+				</div>
+				<div class="register_ui ui">
+					<div class="row clearfix">
+						<span>账&nbsp;号&nbsp;:</span>
+						<input type="text" class="account user_info info">
+					</div>
+					<div class="row clearfix">
+						<span>密&nbsp;码&nbsp;:</span>
+						<input type="password" class="passwd user_info info">
+					</div>
+					<div class="row clearfix">
+						<span>确认密码:</span>
+						<input type="text" class="passwd_m user_info info">
+					</div>
+					<div class="row clearfix">
+						<span>手机号码:</span>
+						<input type="text" class="phone user_info info">
+					</div>
+					<div class="row clearfix specail_row">
+						<span>短信验证码:</span>
+						<input type="text" class="phone_check user_info info">
+						<input type="button" value="发送验证码" class="send send_phone" />
+					</div>
+					<div class="row clearfix">
+						<span>邮&nbsp;箱&nbsp;:</span>
+						<input type="text" class="email user_info info">
+					</div>
+					<div class="row clearfix specail_row">
+						<span>邮箱验证码:</span>
+						<input type="text" class="email_check user_info info">
+						<input type="button" value="发送验证码" class="send send_email" />
+					</div>
+					<div class="row clearfix specail_row">
+						<span>验证码:</span>
+						<input type="text" class='img_check user_info info'>
+						<img src="verifiy.gif">
+					</div>
+					<div class="row clearfix">
+						<input type="button" class="register_btn btn" value="注册">
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				$(".tips>div").click(function() {
+					let index = $(this).index();
+					$(".ui").eq(index).css("display", "block").siblings().css("display", "none");
+					$(".container .info").val("");
+				})
+				let ajax = function() {
+					$.ajax({
+						type: "post",
+						url: "/users?action=login",
+						async: true,
+						data: {
+							account: $(".login_ui .account").val(),
+							passwd: $(".login_ui .passwd").val(),
+						},
+						success: function(result) {
+							if(result.status == 1) {
+								location.href = "/home.html";
+							}else{
+								console.log(result)
+							}
+						}
+					})
+				}
+				//进行登陆
+				$(".login_btn").click(function() {
+					ajax();
+				})
+				$(document).keydown(function(e) {
+					e = e || event;
+					if(event.keyCode == 13) {
+						ajax();
+					}
+				});
+				//进行注册
+				$(".register_btn").click(function() {
+					if($(".passwd").val() != $(".passwd_m").val()) {
+						alert("两次密码不正确，请重新输入")
+						return;
+					}
+					$.ajax({
+						type: "post",
+						url: "/users?action=register",
+						async: true,
+						data: {
+							account: $(".register_ui .account").val(),
+							passwd: $(".register_ui .passwd").val(),
+							phone: $(".register_ui .phone").val(),
+							email: $(".register_ui .eamil").val()
+						},
+						success: function(result) {
+							console.log(result);
+						}
+					});
+				})
+
+				//获取验证码时等待
+				$(".send").click(function() {
+					let tip = $(this).val();
+					$(this).attr("disabled", true);
+					let _this = $(this);
+					let i = 60;
+					let time = setInterval(function() {
+						if(i <= 0) {
+							clearInterval(time);
+							_this.attr("disabled", false);
+							_this.val(tip);
+							return;
+						}
+						_this.val((i--) + "秒后重新发送");
+					}, 1000)
+				})
+
+				//获取邮箱验证码
+				$(".send_email").click(function() {
+					let email_addr = $(".email").val();
+					$.ajax({
+						type: "get",
+						url: "/send_email",
+						async: true,
+						data: {
+							email: email_addr,
+							type: "register"
+						},
+						success:function(result){
+							console.log(result)
+						},
+						error:function(e){
+							console.log(e)
+						}
+					});
+				})
+
+				//刷新图片验证码
+				$("img").click(function() {
+					$(this).attr("src", "verifiy.gif?" + Math.random())
+				})
+			})
+		</script>
+	</body>
+
+</html>

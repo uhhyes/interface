@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.container {
+				width: 1280px;
+				margin: 0 auto;
+			}
+			
+			.box {
+				margin: 100px auto;
+				width: 400px;
+				border: 1px solid red;
+			}
+			
+			.clearfix:after {
+				content: "";
+				display: block;
+				clear: both;
+				height: 0;
+				visibility: hidden;
+			}
+			
+			.tips>div {
+				border: 1px solid red;
+				width: calc( 50% - 2px);
+				float: left;
+				line-height: 46px;
+				text-align: center;
+				font-size: 24px;
+			}
+			
+			.form {
+				display: flex;
+				justify-content: center;
+				flex-wrap: wrap;
+				padding-top: 20px;
+				padding-bottom: 20px;
+			}
+			
+			.form>.info {
+				width: 300px;
+				margin: auto 0;
+				margin: 10px 0 10px 0;
+				line-height: 30px;
+				text-indent: 10px;
+				outline: none;
+			}
+			
+			.form>.btn {
+				width: 100px;
+				height: 30px;
+				margin-top: 20px;
+			}
+			
+			.form>span {
+				width: 50px;
+				line-height: 50px;
+			}
+			
+			.form_box:last-child {
+				display: none;
+			}
+			
+			.form>span::selection,
+			.tips>div::selection {
+				background-color: #fff;
+				color: #000
+			}
+		</style>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="box">
+				<div class="tips clearfix">
+					<div class="login_tips">登 陆</div>
+					<div class="register_tips">注 册</div>
+				</div>
+				<div>
+					<div class="form_box">
+						<div class="form_login form">
+							<span>账 号:</span><input type="text" class="account info" placeholder="账号/手机号/邮箱">
+							<span>密 码:</span><input type="password" class="passwd info">
+							<input type="button" value="登陆" class="login btn">
+						</div>
+					</div>
+					<div class="form_box">
+						<div class="form_register form">
+							<span>账 号:</span><input type="text" class="account info">
+							<span>密 码:</span><input type="password" class="passwd info">
+							<span>手 机:</span><input type="text" class="phone info">
+							<span>邮 箱:</span><input type="email" class="eamil info">
+							<input type="button" value="注册" class="register btn">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				$(".tips>div").click(function() {
+					let index = $(this).index();
+					$(".form_box").eq(index).css("display", "block").siblings().css("display", "none");
+					$(".form .info").val("");
+				})
+				$(".login").click(function() {
+					$.ajax({
+						type: "post",
+						url: "/users?action=login",
+						async: true,
+						data: {
+							account: $(".form_login .account").val(),
+							passwd: $(".form_login .passwd").val(),
+						},
+						success: function(result) {
+							if(result.status == 1) {
+								location.href = "/home.html";
+							}
+						}
+					});
+				})
+				$(".register").click(function() {
+					$.ajax({
+						type: "post",
+						url: "/users?action=register",
+						async: true,
+						data: {
+							account: $(".form_register .account").val(),
+							passwd: $(".form_register .passwd").val(),
+							phone: $(".form_register .phone").val(),
+							email: $(".form_register .eamil").val()
+						},
+						success: function(result) {
+							console.log(result);
+						}
+					})
+				})
+			})
+		</script>
+	</body>
+
+</html>

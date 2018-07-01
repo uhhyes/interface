@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<input id="name" placeholder="账号"><br />
+		<input type="password" placeholder="密码" id="pwd"><br />
+		<input type="button" value="Login" id="button">
+		<script>
+			$("#button").click(function(){
+				$.ajax({
+					method:"post",
+					url:"/users?action=login",
+					data:{
+						account:$("#name").val(),
+						passwd:$("#pwd").val(),
+					},
+					success:function(str){
+						console.log(str)
+					}
+				});
+			})
+		</script>
+	</body>
+</html>
